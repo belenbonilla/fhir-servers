@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
--- Dumped by pg_dump version 16.2 (Debian 16.2-1.pgdg120+2)
+-- Dumped from database version 15.1 (Debian 15.1-1.pgdg110+1)
+-- Dumped by pg_dump version 15.1 (Debian 15.1-1.pgdg110+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -50,7 +50,7 @@ CREATE TABLE public.bt2_job_instance (
     update_time timestamp(6) without time zone,
     warning_msg character varying(4000),
     work_chunks_purged boolean NOT NULL,
-    CONSTRAINT bt2_job_instance_stat_check CHECK (((stat)::text = ANY ((ARRAY['QUEUED'::character varying, 'IN_PROGRESS'::character varying, 'FINALIZE'::character varying, 'COMPLETED'::character varying, 'ERRORED'::character varying, 'FAILED'::character varying, 'CANCELLED'::character varying])::text[])))
+    CONSTRAINT bt2_job_instance_stat_check CHECK (((stat)::text = ANY (ARRAY[('QUEUED'::character varying)::text, ('IN_PROGRESS'::character varying)::text, ('FINALIZE'::character varying)::text, ('COMPLETED'::character varying)::text, ('ERRORED'::character varying)::text, ('FAILED'::character varying)::text, ('CANCELLED'::character varying)::text])))
 );
 
 
@@ -77,7 +77,7 @@ CREATE TABLE public.bt2_work_chunk (
     tgt_step_id character varying(100) NOT NULL,
     update_time timestamp(6) without time zone,
     warning_msg character varying(4000),
-    CONSTRAINT bt2_work_chunk_stat_check CHECK (((stat)::text = ANY ((ARRAY['QUEUED'::character varying, 'IN_PROGRESS'::character varying, 'ERRORED'::character varying, 'FAILED'::character varying, 'COMPLETED'::character varying])::text[])))
+    CONSTRAINT bt2_work_chunk_stat_check CHECK (((stat)::text = ANY (ARRAY[('QUEUED'::character varying)::text, ('IN_PROGRESS'::character varying)::text, ('ERRORED'::character varying)::text, ('FAILED'::character varying)::text, ('COMPLETED'::character varying)::text])))
 );
 
 
@@ -163,7 +163,7 @@ CREATE TABLE public.hfj_blk_import_job (
     status_message character varying(500),
     status_time timestamp(6) without time zone NOT NULL,
     optlock integer NOT NULL,
-    CONSTRAINT hfj_blk_import_job_job_status_check CHECK (((job_status)::text = ANY ((ARRAY['STAGING'::character varying, 'READY'::character varying, 'RUNNING'::character varying, 'COMPLETE'::character varying, 'ERROR'::character varying])::text[]))),
+    CONSTRAINT hfj_blk_import_job_job_status_check CHECK (((job_status)::text = ANY (ARRAY[('STAGING'::character varying)::text, ('READY'::character varying)::text, ('RUNNING'::character varying)::text, ('COMPLETE'::character varying)::text, ('ERROR'::character varying)::text]))),
     CONSTRAINT hfj_blk_import_job_row_processing_mode_check CHECK (((row_processing_mode)::text = 'FHIR_TRANSACTION'::text))
 );
 
@@ -367,8 +367,8 @@ CREATE TABLE public.hfj_res_ver (
     res_type character varying(40) NOT NULL,
     res_ver bigint NOT NULL,
     source_uri character varying(100),
-    CONSTRAINT hfj_res_ver_res_encoding_check CHECK (((res_encoding)::text = ANY ((ARRAY['JSON'::character varying, 'JSONC'::character varying, 'DEL'::character varying, 'ESR'::character varying])::text[]))),
-    CONSTRAINT hfj_res_ver_res_version_check CHECK (((res_version)::text = ANY ((ARRAY['DSTU2'::character varying, 'DSTU2_HL7ORG'::character varying, 'DSTU2_1'::character varying, 'DSTU3'::character varying, 'R4'::character varying, 'R4B'::character varying, 'R5'::character varying])::text[])))
+    CONSTRAINT hfj_res_ver_res_encoding_check CHECK (((res_encoding)::text = ANY (ARRAY[('JSON'::character varying)::text, ('JSONC'::character varying)::text, ('DEL'::character varying)::text, ('ESR'::character varying)::text]))),
+    CONSTRAINT hfj_res_ver_res_version_check CHECK (((res_version)::text = ANY (ARRAY[('DSTU2'::character varying)::text, ('DSTU2_HL7ORG'::character varying)::text, ('DSTU2_1'::character varying)::text, ('DSTU3'::character varying)::text, ('R4'::character varying)::text, ('R4B'::character varying)::text, ('R5'::character varying)::text])))
 );
 
 
@@ -421,7 +421,7 @@ CREATE TABLE public.hfj_resource (
     res_type character varying(40) NOT NULL,
     search_url_present boolean,
     res_ver bigint,
-    CONSTRAINT hfj_resource_res_version_check CHECK (((res_version)::text = ANY ((ARRAY['DSTU2'::character varying, 'DSTU2_HL7ORG'::character varying, 'DSTU2_1'::character varying, 'DSTU3'::character varying, 'R4'::character varying, 'R4B'::character varying, 'R5'::character varying])::text[])))
+    CONSTRAINT hfj_resource_res_version_check CHECK (((res_version)::text = ANY (ARRAY[('DSTU2'::character varying)::text, ('DSTU2_HL7ORG'::character varying)::text, ('DSTU2_1'::character varying)::text, ('DSTU3'::character varying)::text, ('R4'::character varying)::text, ('R4B'::character varying)::text, ('R5'::character varying)::text])))
 );
 
 
@@ -480,7 +480,7 @@ CREATE TABLE public.hfj_search (
     total_count integer,
     search_uuid character varying(48) NOT NULL,
     optlock_version integer,
-    CONSTRAINT hfj_search_search_status_check CHECK (((search_status)::text = ANY ((ARRAY['LOADING'::character varying, 'PASSCMPLET'::character varying, 'FINISHED'::character varying, 'FAILED'::character varying, 'GONE'::character varying])::text[]))),
+    CONSTRAINT hfj_search_search_status_check CHECK (((search_status)::text = ANY (ARRAY[('LOADING'::character varying)::text, ('PASSCMPLET'::character varying)::text, ('FINISHED'::character varying)::text, ('FAILED'::character varying)::text, ('GONE'::character varying)::text]))),
     CONSTRAINT hfj_search_search_type_check CHECK (((search_type >= 0) AND (search_type <= 2)))
 );
 
@@ -820,7 +820,7 @@ CREATE TABLE public.npm_package_ver (
     version_id character varying(200) NOT NULL,
     package_pid bigint NOT NULL,
     binary_res_id bigint NOT NULL,
-    CONSTRAINT npm_package_ver_fhir_version_check CHECK (((fhir_version)::text = ANY ((ARRAY['DSTU2'::character varying, 'DSTU2_HL7ORG'::character varying, 'DSTU2_1'::character varying, 'DSTU3'::character varying, 'R4'::character varying, 'R4B'::character varying, 'R5'::character varying])::text[])))
+    CONSTRAINT npm_package_ver_fhir_version_check CHECK (((fhir_version)::text = ANY (ARRAY[('DSTU2'::character varying)::text, ('DSTU2_HL7ORG'::character varying)::text, ('DSTU2_1'::character varying)::text, ('DSTU3'::character varying)::text, ('R4'::character varying)::text, ('R4B'::character varying)::text, ('R5'::character varying)::text])))
 );
 
 
@@ -843,7 +843,7 @@ CREATE TABLE public.npm_package_ver_res (
     updated_time timestamp(6) without time zone NOT NULL,
     packver_pid bigint NOT NULL,
     binary_res_id bigint NOT NULL,
-    CONSTRAINT npm_package_ver_res_fhir_version_check CHECK (((fhir_version)::text = ANY ((ARRAY['DSTU2'::character varying, 'DSTU2_HL7ORG'::character varying, 'DSTU2_1'::character varying, 'DSTU3'::character varying, 'R4'::character varying, 'R4B'::character varying, 'R5'::character varying])::text[])))
+    CONSTRAINT npm_package_ver_res_fhir_version_check CHECK (((fhir_version)::text = ANY (ARRAY[('DSTU2'::character varying)::text, ('DSTU2_HL7ORG'::character varying)::text, ('DSTU2_1'::character varying)::text, ('DSTU3'::character varying)::text, ('R4'::character varying)::text, ('R4B'::character varying)::text, ('R5'::character varying)::text])))
 );
 
 
@@ -861,7 +861,7 @@ CREATE SEQUENCE public.seq_blkexcol_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkexcol_pid OWNER TO admin;
+ALTER TABLE public.seq_blkexcol_pid OWNER TO admin;
 
 --
 -- Name: seq_blkexcolfile_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -875,7 +875,7 @@ CREATE SEQUENCE public.seq_blkexcolfile_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkexcolfile_pid OWNER TO admin;
+ALTER TABLE public.seq_blkexcolfile_pid OWNER TO admin;
 
 --
 -- Name: seq_blkexjob_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -889,7 +889,7 @@ CREATE SEQUENCE public.seq_blkexjob_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkexjob_pid OWNER TO admin;
+ALTER TABLE public.seq_blkexjob_pid OWNER TO admin;
 
 --
 -- Name: seq_blkimjob_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -903,7 +903,7 @@ CREATE SEQUENCE public.seq_blkimjob_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkimjob_pid OWNER TO admin;
+ALTER TABLE public.seq_blkimjob_pid OWNER TO admin;
 
 --
 -- Name: seq_blkimjobfile_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -917,7 +917,7 @@ CREATE SEQUENCE public.seq_blkimjobfile_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkimjobfile_pid OWNER TO admin;
+ALTER TABLE public.seq_blkimjobfile_pid OWNER TO admin;
 
 --
 -- Name: seq_cncpt_map_grp_elm_tgt_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -931,7 +931,7 @@ CREATE SEQUENCE public.seq_cncpt_map_grp_elm_tgt_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_cncpt_map_grp_elm_tgt_pid OWNER TO admin;
+ALTER TABLE public.seq_cncpt_map_grp_elm_tgt_pid OWNER TO admin;
 
 --
 -- Name: seq_codesystem_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -945,7 +945,7 @@ CREATE SEQUENCE public.seq_codesystem_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_codesystem_pid OWNER TO admin;
+ALTER TABLE public.seq_codesystem_pid OWNER TO admin;
 
 --
 -- Name: seq_codesystemver_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -959,7 +959,7 @@ CREATE SEQUENCE public.seq_codesystemver_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_codesystemver_pid OWNER TO admin;
+ALTER TABLE public.seq_codesystemver_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_desig_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -973,7 +973,7 @@ CREATE SEQUENCE public.seq_concept_desig_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_desig_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_desig_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_map_group_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -987,7 +987,7 @@ CREATE SEQUENCE public.seq_concept_map_group_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_map_group_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_map_group_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_map_grp_elm_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1001,7 +1001,7 @@ CREATE SEQUENCE public.seq_concept_map_grp_elm_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_map_grp_elm_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_map_grp_elm_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_map_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1015,7 +1015,7 @@ CREATE SEQUENCE public.seq_concept_map_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_map_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_map_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_pc_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1029,7 +1029,7 @@ CREATE SEQUENCE public.seq_concept_pc_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_pc_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_pc_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1043,7 +1043,7 @@ CREATE SEQUENCE public.seq_concept_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_prop_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1057,7 +1057,7 @@ CREATE SEQUENCE public.seq_concept_prop_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_prop_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_prop_pid OWNER TO admin;
 
 --
 -- Name: seq_empi_link_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1071,7 +1071,7 @@ CREATE SEQUENCE public.seq_empi_link_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_empi_link_id OWNER TO admin;
+ALTER TABLE public.seq_empi_link_id OWNER TO admin;
 
 --
 -- Name: seq_forcedid_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1085,7 +1085,7 @@ CREATE SEQUENCE public.seq_forcedid_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_forcedid_id OWNER TO admin;
+ALTER TABLE public.seq_forcedid_id OWNER TO admin;
 
 --
 -- Name: seq_hfj_revinfo; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1099,7 +1099,7 @@ CREATE SEQUENCE public.seq_hfj_revinfo
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_hfj_revinfo OWNER TO admin;
+ALTER TABLE public.seq_hfj_revinfo OWNER TO admin;
 
 --
 -- Name: seq_historytag_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1113,7 +1113,7 @@ CREATE SEQUENCE public.seq_historytag_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_historytag_id OWNER TO admin;
+ALTER TABLE public.seq_historytag_id OWNER TO admin;
 
 --
 -- Name: seq_idxcmbtoknu_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1127,7 +1127,7 @@ CREATE SEQUENCE public.seq_idxcmbtoknu_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_idxcmbtoknu_id OWNER TO admin;
+ALTER TABLE public.seq_idxcmbtoknu_id OWNER TO admin;
 
 --
 -- Name: seq_idxcmpstruniq_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1141,7 +1141,7 @@ CREATE SEQUENCE public.seq_idxcmpstruniq_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_idxcmpstruniq_id OWNER TO admin;
+ALTER TABLE public.seq_idxcmpstruniq_id OWNER TO admin;
 
 --
 -- Name: seq_npm_pack; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1155,7 +1155,7 @@ CREATE SEQUENCE public.seq_npm_pack
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_npm_pack OWNER TO admin;
+ALTER TABLE public.seq_npm_pack OWNER TO admin;
 
 --
 -- Name: seq_npm_packver; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1169,7 +1169,7 @@ CREATE SEQUENCE public.seq_npm_packver
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_npm_packver OWNER TO admin;
+ALTER TABLE public.seq_npm_packver OWNER TO admin;
 
 --
 -- Name: seq_npm_packverres; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1183,7 +1183,7 @@ CREATE SEQUENCE public.seq_npm_packverres
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_npm_packverres OWNER TO admin;
+ALTER TABLE public.seq_npm_packverres OWNER TO admin;
 
 --
 -- Name: seq_res_reindex_job; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1197,7 +1197,7 @@ CREATE SEQUENCE public.seq_res_reindex_job
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_res_reindex_job OWNER TO admin;
+ALTER TABLE public.seq_res_reindex_job OWNER TO admin;
 
 --
 -- Name: seq_reslink_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1211,7 +1211,7 @@ CREATE SEQUENCE public.seq_reslink_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_reslink_id OWNER TO admin;
+ALTER TABLE public.seq_reslink_id OWNER TO admin;
 
 --
 -- Name: seq_resource_history_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1225,7 +1225,7 @@ CREATE SEQUENCE public.seq_resource_history_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_resource_history_id OWNER TO admin;
+ALTER TABLE public.seq_resource_history_id OWNER TO admin;
 
 --
 -- Name: seq_resource_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1239,7 +1239,7 @@ CREATE SEQUENCE public.seq_resource_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_resource_id OWNER TO admin;
+ALTER TABLE public.seq_resource_id OWNER TO admin;
 
 --
 -- Name: seq_resparmpresent_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1253,7 +1253,7 @@ CREATE SEQUENCE public.seq_resparmpresent_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_resparmpresent_id OWNER TO admin;
+ALTER TABLE public.seq_resparmpresent_id OWNER TO admin;
 
 --
 -- Name: seq_restag_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1267,7 +1267,7 @@ CREATE SEQUENCE public.seq_restag_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_restag_id OWNER TO admin;
+ALTER TABLE public.seq_restag_id OWNER TO admin;
 
 --
 -- Name: seq_search; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1281,7 +1281,7 @@ CREATE SEQUENCE public.seq_search
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_search OWNER TO admin;
+ALTER TABLE public.seq_search OWNER TO admin;
 
 --
 -- Name: seq_search_inc; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1295,7 +1295,7 @@ CREATE SEQUENCE public.seq_search_inc
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_search_inc OWNER TO admin;
+ALTER TABLE public.seq_search_inc OWNER TO admin;
 
 --
 -- Name: seq_search_res; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1309,7 +1309,7 @@ CREATE SEQUENCE public.seq_search_res
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_search_res OWNER TO admin;
+ALTER TABLE public.seq_search_res OWNER TO admin;
 
 --
 -- Name: seq_spidx_coords; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1323,7 +1323,7 @@ CREATE SEQUENCE public.seq_spidx_coords
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_coords OWNER TO admin;
+ALTER TABLE public.seq_spidx_coords OWNER TO admin;
 
 --
 -- Name: seq_spidx_date; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1337,7 +1337,7 @@ CREATE SEQUENCE public.seq_spidx_date
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_date OWNER TO admin;
+ALTER TABLE public.seq_spidx_date OWNER TO admin;
 
 --
 -- Name: seq_spidx_number; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1351,7 +1351,7 @@ CREATE SEQUENCE public.seq_spidx_number
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_number OWNER TO admin;
+ALTER TABLE public.seq_spidx_number OWNER TO admin;
 
 --
 -- Name: seq_spidx_quantity; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1365,7 +1365,7 @@ CREATE SEQUENCE public.seq_spidx_quantity
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_quantity OWNER TO admin;
+ALTER TABLE public.seq_spidx_quantity OWNER TO admin;
 
 --
 -- Name: seq_spidx_quantity_nrml; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1379,7 +1379,7 @@ CREATE SEQUENCE public.seq_spidx_quantity_nrml
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_quantity_nrml OWNER TO admin;
+ALTER TABLE public.seq_spidx_quantity_nrml OWNER TO admin;
 
 --
 -- Name: seq_spidx_string; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1393,7 +1393,7 @@ CREATE SEQUENCE public.seq_spidx_string
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_string OWNER TO admin;
+ALTER TABLE public.seq_spidx_string OWNER TO admin;
 
 --
 -- Name: seq_spidx_token; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1407,7 +1407,7 @@ CREATE SEQUENCE public.seq_spidx_token
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_token OWNER TO admin;
+ALTER TABLE public.seq_spidx_token OWNER TO admin;
 
 --
 -- Name: seq_spidx_uri; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1421,7 +1421,7 @@ CREATE SEQUENCE public.seq_spidx_uri
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_uri OWNER TO admin;
+ALTER TABLE public.seq_spidx_uri OWNER TO admin;
 
 --
 -- Name: seq_subscription_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1435,7 +1435,7 @@ CREATE SEQUENCE public.seq_subscription_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_subscription_id OWNER TO admin;
+ALTER TABLE public.seq_subscription_id OWNER TO admin;
 
 --
 -- Name: seq_tagdef_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1449,7 +1449,7 @@ CREATE SEQUENCE public.seq_tagdef_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_tagdef_id OWNER TO admin;
+ALTER TABLE public.seq_tagdef_id OWNER TO admin;
 
 --
 -- Name: seq_valueset_c_dsgntn_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1463,7 +1463,7 @@ CREATE SEQUENCE public.seq_valueset_c_dsgntn_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_valueset_c_dsgntn_pid OWNER TO admin;
+ALTER TABLE public.seq_valueset_c_dsgntn_pid OWNER TO admin;
 
 --
 -- Name: seq_valueset_concept_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1477,7 +1477,7 @@ CREATE SEQUENCE public.seq_valueset_concept_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_valueset_concept_pid OWNER TO admin;
+ALTER TABLE public.seq_valueset_concept_pid OWNER TO admin;
 
 --
 -- Name: seq_valueset_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1491,7 +1491,7 @@ CREATE SEQUENCE public.seq_valueset_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_valueset_pid OWNER TO admin;
+ALTER TABLE public.seq_valueset_pid OWNER TO admin;
 
 --
 -- Name: trm_codesystem; Type: TABLE; Schema: public; Owner: admin
@@ -1626,7 +1626,7 @@ CREATE TABLE public.trm_concept_map_grp_elm_tgt (
     system_version character varying(200),
     valueset_url character varying(200),
     concept_map_grp_elm_pid bigint NOT NULL,
-    CONSTRAINT trm_concept_map_grp_elm_tgt_target_equivalence_check CHECK (((target_equivalence)::text = ANY ((ARRAY['RELATEDTO'::character varying, 'EQUIVALENT'::character varying, 'EQUAL'::character varying, 'WIDER'::character varying, 'SUBSUMES'::character varying, 'NARROWER'::character varying, 'SPECIALIZES'::character varying, 'INEXACT'::character varying, 'UNMATCHED'::character varying, 'DISJOINT'::character varying, 'NULL'::character varying])::text[])))
+    CONSTRAINT trm_concept_map_grp_elm_tgt_target_equivalence_check CHECK (((target_equivalence)::text = ANY (ARRAY[('RELATEDTO'::character varying)::text, ('EQUIVALENT'::character varying)::text, ('EQUAL'::character varying)::text, ('WIDER'::character varying)::text, ('SUBSUMES'::character varying)::text, ('NARROWER'::character varying)::text, ('SPECIALIZES'::character varying)::text, ('INEXACT'::character varying)::text, ('UNMATCHED'::character varying)::text, ('DISJOINT'::character varying)::text, ('NULL'::character varying)::text])))
 );
 
 
@@ -1682,7 +1682,7 @@ CREATE TABLE public.trm_valueset (
     total_concepts bigint DEFAULT 0 NOT NULL,
     url character varying(200) NOT NULL,
     ver character varying(200),
-    CONSTRAINT trm_valueset_expansion_status_check CHECK (((expansion_status)::text = ANY ((ARRAY['NOT_EXPANDED'::character varying, 'EXPANSION_IN_PROGRESS'::character varying, 'EXPANDED'::character varying, 'FAILED_TO_EXPAND'::character varying])::text[])))
+    CONSTRAINT trm_valueset_expansion_status_check CHECK (((expansion_status)::text = ANY (ARRAY[('NOT_EXPANDED'::character varying)::text, ('EXPANSION_IN_PROGRESS'::character varying)::text, ('EXPANDED'::character varying)::text, ('FAILED_TO_EXPAND'::character varying)::text])))
 );
 
 
@@ -1799,6 +1799,24 @@ SELECT pg_catalog.lo_create('17217');
 ALTER LARGE OBJECT 17217 OWNER TO admin;
 
 --
+-- Name: 17218; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('17218');
+
+
+ALTER LARGE OBJECT 17218 OWNER TO admin;
+
+--
+-- Name: 25398; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('25398');
+
+
+ALTER LARGE OBJECT 25398 OWNER TO admin;
+
+--
 -- Name: 25409; Type: BLOB; Schema: -; Owner: admin
 --
 
@@ -1833,6 +1851,15 @@ SELECT pg_catalog.lo_create('25412');
 
 
 ALTER LARGE OBJECT 25412 OWNER TO admin;
+
+--
+-- Name: 33590; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('33590');
+
+
+ALTER LARGE OBJECT 33590 OWNER TO admin;
 
 --
 -- Name: 33601; Type: BLOB; Schema: -; Owner: admin
@@ -2063,6 +2090,8 @@ COPY public.hfj_res_ver (pid, partition_date, partition_id, res_deleted_at, res_
 103	\N	\N	2024-03-30 04:24:27.377	R4	t	2024-03-30 04:01:12.601	2024-03-30 04:24:27.377	DEL	rQaFHotQsyCtM6Cs	\N	53	\N	Encounter	2	\N
 104	\N	\N	2024-03-30 04:24:32.494	R4	t	2024-03-30 04:02:01.224	2024-03-30 04:24:32.494	DEL	tFUsUKp6EgOsGW8v	\N	54	\N	Encounter	2	\N
 105	\N	\N	2024-03-30 04:24:37.28	R4	t	2024-03-30 04:03:25.669	2024-03-30 04:24:37.28	DEL	T0OjeCRnSxgXM6cf	\N	55	\N	Encounter	2	\N
+152	\N	\N	\N	R4	f	2024-03-30 05:33:49.536	2024-03-30 05:33:49.536	JSON	tqcqgVvaoGJSN0Kh	\N	102	{"resourceType":"Observation","identifier":[{"use":"official","system":"http://www.bmc.nl/zorgportal/identifiers/observations","value":"6323"}],"status":"final","code":{"coding":[{"system":"http://loinc.org","code":"14743-9","display":"Glucose [Moles/volume] in Capillary blood by Glucometer"}],"text":"Before meal"},"subject":{"reference":"Patient/1"},"effectiveDateTime":"2024-03-06T18:40:00+00:00","issued":"2024-03-06T18:40:00+00:00","performer":[{"reference":"Patient/1"}],"valueQuantity":{"value":6.4,"unit":"mmol/l","system":"http://unitsofmeasure.org","code":"mmol/L"},"interpretation":[{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation","code":"N","display":"Normal"}]}],"referenceRange":[{"low":{"value":3.9,"unit":"mmol/l","system":"http://unitsofmeasure.org","code":"mmol/L"},"high":{"value":7.2,"unit":"mmol/l","system":"http://unitsofmeasure.org","code":"mmol/L"},"type":{"text":"Normal preprandial glucose range"}}]}	Observation	1	\N
+153	\N	\N	2024-03-30 05:34:24.798	R4	f	2024-03-30 05:33:49.536	2024-03-30 05:34:24.798	DEL	2o0cocOgoPxDchPh	\N	102	\N	Observation	2	\N
 \.
 
 
@@ -2087,6 +2116,8 @@ COPY public.hfj_res_ver_prov (res_ver_pid, partition_date, partition_id, request
 103	\N	\N	rQaFHotQsyCtM6Cs	\N	53
 104	\N	\N	tFUsUKp6EgOsGW8v	\N	54
 105	\N	\N	T0OjeCRnSxgXM6cf	\N	55
+152	\N	\N	tqcqgVvaoGJSN0Kh	\N	102
+153	\N	\N	2o0cocOgoPxDchPh	\N	102
 \.
 
 
@@ -2107,6 +2138,7 @@ COPY public.hfj_resource (res_id, partition_date, partition_id, res_deleted_at, 
 53	\N	\N	2024-03-30 04:24:27.377	R4	t	2024-03-30 04:01:12.601	2024-03-30 04:24:27.377	53	f	\N	1	\N	f	f	f	f	f	f	f	f	f	f	Encounter	f	2
 54	\N	\N	2024-03-30 04:24:32.494	R4	t	2024-03-30 04:02:01.224	2024-03-30 04:24:32.494	54	f	\N	1	\N	f	f	f	f	f	f	f	f	f	f	Encounter	f	2
 55	\N	\N	2024-03-30 04:24:37.28	R4	t	2024-03-30 04:03:25.669	2024-03-30 04:24:37.28	55	f	\N	1	\N	f	f	f	f	f	f	f	f	f	f	Encounter	f	2
+102	\N	\N	2024-03-30 05:34:24.798	R4	f	2024-03-30 05:33:49.536	2024-03-30 05:34:24.798	102	f	\N	1	\N	f	f	f	f	f	f	f	f	f	f	Observation	f	2
 \.
 
 
@@ -2131,13 +2163,6 @@ COPY public.hfj_revinfo (rev, revtstmp) FROM stdin;
 --
 
 COPY public.hfj_search (pid, created, search_deleted, expiry_or_null, failure_code, failure_message, last_updated_high, last_updated_low, num_blocked, num_found, preferred_page_size, resource_id, resource_type, search_param_map, search_query_string, search_query_string_hash, search_type, search_status, total_count, search_uuid, optlock_version) FROM stdin;
-103	2024-03-30 04:08:52.96	f	\N	\N	\N	\N	\N	0	7	20	\N	Observation	\N	25409	223007692	1	FINISHED	7	5c896eb5-8f7d-4bc6-9fc9-87f319a9b391	1
-104	2024-03-30 04:10:53.847	f	\N	\N	\N	\N	\N	0	0	20	\N	Encounter	\N	25410	223007692	1	FINISHED	0	7d124627-d918-4eb7-a3d1-1576f78e7fc8	1
-105	2024-03-30 04:12:16.905	f	\N	\N	\N	\N	\N	0	0	20	\N	Practitioner	\N	25411	223007692	1	FINISHED	0	9aca87ef-28b5-47bb-b88b-7383f8c5d1be	1
-106	2024-03-30 04:16:09.52	f	\N	\N	\N	\N	\N	0	0	20	\N	Encounter	\N	25412	223007692	1	FINISHED	0	6011cfa0-f241-4657-baf7-96de4056c6fd	1
-152	2024-03-30 04:22:01.391	f	\N	\N	\N	\N	\N	0	4	20	\N	Encounter	\N	33601	223007692	1	FINISHED	4	03ae5737-def8-4689-8ed5-e8db178cd67f	1
-153	2024-03-30 04:24:57.466	f	\N	\N	\N	\N	\N	0	0	20	\N	Encounter	\N	33602	223007692	1	FINISHED	0	021dfc64-9eba-441a-b3d0-78be3f379087	1
-154	2024-03-30 05:04:04.842	f	\N	\N	\N	\N	\N	0	7	20	\N	Observation	\N	33603	161207	1	FINISHED	7	78a253bd-da85-4e3d-9d5e-9fa698da7282	1
 \.
 
 
@@ -2154,24 +2179,6 @@ COPY public.hfj_search_include (pid, search_include, inc_recurse, revinclude, se
 --
 
 COPY public.hfj_search_result (pid, search_order, resource_pid, search_pid) FROM stdin;
-109	0	2	103
-110	1	3	103
-111	2	4	103
-112	3	5	103
-113	4	6	103
-114	5	7	103
-115	6	8	103
-152	0	52	152
-153	1	53	152
-154	2	54	152
-155	3	55	152
-156	0	8	154
-157	1	7	154
-158	2	3	154
-159	3	5	154
-160	4	4	154
-161	5	6	154
-162	6	2	154
 \.
 
 
@@ -2688,21 +2695,21 @@ SELECT pg_catalog.setval('public.seq_res_reindex_job', 1, false);
 -- Name: seq_reslink_id; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_reslink_id', 101, true);
+SELECT pg_catalog.setval('public.seq_reslink_id', 151, true);
 
 
 --
 -- Name: seq_resource_history_id; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_resource_history_id', 151, true);
+SELECT pg_catalog.setval('public.seq_resource_history_id', 201, true);
 
 
 --
 -- Name: seq_resource_id; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_resource_id', 101, true);
+SELECT pg_catalog.setval('public.seq_resource_id', 151, true);
 
 
 --
@@ -2723,7 +2730,7 @@ SELECT pg_catalog.setval('public.seq_restag_id', 101, true);
 -- Name: seq_search; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_search', 201, true);
+SELECT pg_catalog.setval('public.seq_search', 351, true);
 
 
 --
@@ -2737,7 +2744,7 @@ SELECT pg_catalog.setval('public.seq_search_inc', 1, false);
 -- Name: seq_search_res; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_search_res', 201, true);
+SELECT pg_catalog.setval('public.seq_search_res', 251, true);
 
 
 --
@@ -2751,7 +2758,7 @@ SELECT pg_catalog.setval('public.seq_spidx_coords', 1, false);
 -- Name: seq_spidx_date; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_spidx_date', 51, true);
+SELECT pg_catalog.setval('public.seq_spidx_date', 101, true);
 
 
 --
@@ -2765,7 +2772,7 @@ SELECT pg_catalog.setval('public.seq_spidx_number', 1, false);
 -- Name: seq_spidx_quantity; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_spidx_quantity', 51, true);
+SELECT pg_catalog.setval('public.seq_spidx_quantity', 101, true);
 
 
 --
@@ -2779,14 +2786,14 @@ SELECT pg_catalog.setval('public.seq_spidx_quantity_nrml', 1, false);
 -- Name: seq_spidx_string; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_spidx_string', 101, true);
+SELECT pg_catalog.setval('public.seq_spidx_string', 151, true);
 
 
 --
 -- Name: seq_spidx_token; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_spidx_token', 101, true);
+SELECT pg_catalog.setval('public.seq_spidx_token', 151, true);
 
 
 --
@@ -2869,6 +2876,14 @@ SELECT pg_catalog.lo_open('17217', 131072);
 SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
 SELECT pg_catalog.lo_close(0);
 
+SELECT pg_catalog.lo_open('17218', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
+SELECT pg_catalog.lo_open('25398', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
 SELECT pg_catalog.lo_open('25409', 131072);
 SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
 SELECT pg_catalog.lo_close(0);
@@ -2883,6 +2898,10 @@ SELECT pg_catalog.lo_close(0);
 
 SELECT pg_catalog.lo_open('25412', 131072);
 SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
+SELECT pg_catalog.lo_open('33590', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f636f64653d687474702533412532462532466c6f696e632e6f726725374331343734332d3926646174653d6765323032342d30322d323926646174653d6c65323032342d30332d3239267375626a6563743d50617469656e7425324631265f736f72743d2d64617465265f636f756e743d3230');
 SELECT pg_catalog.lo_close(0);
 
 SELECT pg_catalog.lo_open('33601', 131072);

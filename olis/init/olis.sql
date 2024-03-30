@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
--- Dumped by pg_dump version 16.2 (Debian 16.2-1.pgdg120+2)
+-- Dumped from database version 15.1 (Debian 15.1-1.pgdg110+1)
+-- Dumped by pg_dump version 15.1 (Debian 15.1-1.pgdg110+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -50,7 +50,7 @@ CREATE TABLE public.bt2_job_instance (
     update_time timestamp(6) without time zone,
     warning_msg character varying(4000),
     work_chunks_purged boolean NOT NULL,
-    CONSTRAINT bt2_job_instance_stat_check CHECK (((stat)::text = ANY ((ARRAY['QUEUED'::character varying, 'IN_PROGRESS'::character varying, 'FINALIZE'::character varying, 'COMPLETED'::character varying, 'ERRORED'::character varying, 'FAILED'::character varying, 'CANCELLED'::character varying])::text[])))
+    CONSTRAINT bt2_job_instance_stat_check CHECK (((stat)::text = ANY (ARRAY[('QUEUED'::character varying)::text, ('IN_PROGRESS'::character varying)::text, ('FINALIZE'::character varying)::text, ('COMPLETED'::character varying)::text, ('ERRORED'::character varying)::text, ('FAILED'::character varying)::text, ('CANCELLED'::character varying)::text])))
 );
 
 
@@ -77,7 +77,7 @@ CREATE TABLE public.bt2_work_chunk (
     tgt_step_id character varying(100) NOT NULL,
     update_time timestamp(6) without time zone,
     warning_msg character varying(4000),
-    CONSTRAINT bt2_work_chunk_stat_check CHECK (((stat)::text = ANY ((ARRAY['QUEUED'::character varying, 'IN_PROGRESS'::character varying, 'ERRORED'::character varying, 'FAILED'::character varying, 'COMPLETED'::character varying])::text[])))
+    CONSTRAINT bt2_work_chunk_stat_check CHECK (((stat)::text = ANY (ARRAY[('QUEUED'::character varying)::text, ('IN_PROGRESS'::character varying)::text, ('ERRORED'::character varying)::text, ('FAILED'::character varying)::text, ('COMPLETED'::character varying)::text])))
 );
 
 
@@ -163,7 +163,7 @@ CREATE TABLE public.hfj_blk_import_job (
     status_message character varying(500),
     status_time timestamp(6) without time zone NOT NULL,
     optlock integer NOT NULL,
-    CONSTRAINT hfj_blk_import_job_job_status_check CHECK (((job_status)::text = ANY ((ARRAY['STAGING'::character varying, 'READY'::character varying, 'RUNNING'::character varying, 'COMPLETE'::character varying, 'ERROR'::character varying])::text[]))),
+    CONSTRAINT hfj_blk_import_job_job_status_check CHECK (((job_status)::text = ANY (ARRAY[('STAGING'::character varying)::text, ('READY'::character varying)::text, ('RUNNING'::character varying)::text, ('COMPLETE'::character varying)::text, ('ERROR'::character varying)::text]))),
     CONSTRAINT hfj_blk_import_job_row_processing_mode_check CHECK (((row_processing_mode)::text = 'FHIR_TRANSACTION'::text))
 );
 
@@ -367,8 +367,8 @@ CREATE TABLE public.hfj_res_ver (
     res_type character varying(40) NOT NULL,
     res_ver bigint NOT NULL,
     source_uri character varying(100),
-    CONSTRAINT hfj_res_ver_res_encoding_check CHECK (((res_encoding)::text = ANY ((ARRAY['JSON'::character varying, 'JSONC'::character varying, 'DEL'::character varying, 'ESR'::character varying])::text[]))),
-    CONSTRAINT hfj_res_ver_res_version_check CHECK (((res_version)::text = ANY ((ARRAY['DSTU2'::character varying, 'DSTU2_HL7ORG'::character varying, 'DSTU2_1'::character varying, 'DSTU3'::character varying, 'R4'::character varying, 'R4B'::character varying, 'R5'::character varying])::text[])))
+    CONSTRAINT hfj_res_ver_res_encoding_check CHECK (((res_encoding)::text = ANY (ARRAY[('JSON'::character varying)::text, ('JSONC'::character varying)::text, ('DEL'::character varying)::text, ('ESR'::character varying)::text]))),
+    CONSTRAINT hfj_res_ver_res_version_check CHECK (((res_version)::text = ANY (ARRAY[('DSTU2'::character varying)::text, ('DSTU2_HL7ORG'::character varying)::text, ('DSTU2_1'::character varying)::text, ('DSTU3'::character varying)::text, ('R4'::character varying)::text, ('R4B'::character varying)::text, ('R5'::character varying)::text])))
 );
 
 
@@ -421,7 +421,7 @@ CREATE TABLE public.hfj_resource (
     res_type character varying(40) NOT NULL,
     search_url_present boolean,
     res_ver bigint,
-    CONSTRAINT hfj_resource_res_version_check CHECK (((res_version)::text = ANY ((ARRAY['DSTU2'::character varying, 'DSTU2_HL7ORG'::character varying, 'DSTU2_1'::character varying, 'DSTU3'::character varying, 'R4'::character varying, 'R4B'::character varying, 'R5'::character varying])::text[])))
+    CONSTRAINT hfj_resource_res_version_check CHECK (((res_version)::text = ANY (ARRAY[('DSTU2'::character varying)::text, ('DSTU2_HL7ORG'::character varying)::text, ('DSTU2_1'::character varying)::text, ('DSTU3'::character varying)::text, ('R4'::character varying)::text, ('R4B'::character varying)::text, ('R5'::character varying)::text])))
 );
 
 
@@ -480,7 +480,7 @@ CREATE TABLE public.hfj_search (
     total_count integer,
     search_uuid character varying(48) NOT NULL,
     optlock_version integer,
-    CONSTRAINT hfj_search_search_status_check CHECK (((search_status)::text = ANY ((ARRAY['LOADING'::character varying, 'PASSCMPLET'::character varying, 'FINISHED'::character varying, 'FAILED'::character varying, 'GONE'::character varying])::text[]))),
+    CONSTRAINT hfj_search_search_status_check CHECK (((search_status)::text = ANY (ARRAY[('LOADING'::character varying)::text, ('PASSCMPLET'::character varying)::text, ('FINISHED'::character varying)::text, ('FAILED'::character varying)::text, ('GONE'::character varying)::text]))),
     CONSTRAINT hfj_search_search_type_check CHECK (((search_type >= 0) AND (search_type <= 2)))
 );
 
@@ -820,7 +820,7 @@ CREATE TABLE public.npm_package_ver (
     version_id character varying(200) NOT NULL,
     package_pid bigint NOT NULL,
     binary_res_id bigint NOT NULL,
-    CONSTRAINT npm_package_ver_fhir_version_check CHECK (((fhir_version)::text = ANY ((ARRAY['DSTU2'::character varying, 'DSTU2_HL7ORG'::character varying, 'DSTU2_1'::character varying, 'DSTU3'::character varying, 'R4'::character varying, 'R4B'::character varying, 'R5'::character varying])::text[])))
+    CONSTRAINT npm_package_ver_fhir_version_check CHECK (((fhir_version)::text = ANY (ARRAY[('DSTU2'::character varying)::text, ('DSTU2_HL7ORG'::character varying)::text, ('DSTU2_1'::character varying)::text, ('DSTU3'::character varying)::text, ('R4'::character varying)::text, ('R4B'::character varying)::text, ('R5'::character varying)::text])))
 );
 
 
@@ -843,7 +843,7 @@ CREATE TABLE public.npm_package_ver_res (
     updated_time timestamp(6) without time zone NOT NULL,
     packver_pid bigint NOT NULL,
     binary_res_id bigint NOT NULL,
-    CONSTRAINT npm_package_ver_res_fhir_version_check CHECK (((fhir_version)::text = ANY ((ARRAY['DSTU2'::character varying, 'DSTU2_HL7ORG'::character varying, 'DSTU2_1'::character varying, 'DSTU3'::character varying, 'R4'::character varying, 'R4B'::character varying, 'R5'::character varying])::text[])))
+    CONSTRAINT npm_package_ver_res_fhir_version_check CHECK (((fhir_version)::text = ANY (ARRAY[('DSTU2'::character varying)::text, ('DSTU2_HL7ORG'::character varying)::text, ('DSTU2_1'::character varying)::text, ('DSTU3'::character varying)::text, ('R4'::character varying)::text, ('R4B'::character varying)::text, ('R5'::character varying)::text])))
 );
 
 
@@ -861,7 +861,7 @@ CREATE SEQUENCE public.seq_blkexcol_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkexcol_pid OWNER TO admin;
+ALTER TABLE public.seq_blkexcol_pid OWNER TO admin;
 
 --
 -- Name: seq_blkexcolfile_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -875,7 +875,7 @@ CREATE SEQUENCE public.seq_blkexcolfile_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkexcolfile_pid OWNER TO admin;
+ALTER TABLE public.seq_blkexcolfile_pid OWNER TO admin;
 
 --
 -- Name: seq_blkexjob_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -889,7 +889,7 @@ CREATE SEQUENCE public.seq_blkexjob_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkexjob_pid OWNER TO admin;
+ALTER TABLE public.seq_blkexjob_pid OWNER TO admin;
 
 --
 -- Name: seq_blkimjob_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -903,7 +903,7 @@ CREATE SEQUENCE public.seq_blkimjob_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkimjob_pid OWNER TO admin;
+ALTER TABLE public.seq_blkimjob_pid OWNER TO admin;
 
 --
 -- Name: seq_blkimjobfile_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -917,7 +917,7 @@ CREATE SEQUENCE public.seq_blkimjobfile_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_blkimjobfile_pid OWNER TO admin;
+ALTER TABLE public.seq_blkimjobfile_pid OWNER TO admin;
 
 --
 -- Name: seq_cncpt_map_grp_elm_tgt_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -931,7 +931,7 @@ CREATE SEQUENCE public.seq_cncpt_map_grp_elm_tgt_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_cncpt_map_grp_elm_tgt_pid OWNER TO admin;
+ALTER TABLE public.seq_cncpt_map_grp_elm_tgt_pid OWNER TO admin;
 
 --
 -- Name: seq_codesystem_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -945,7 +945,7 @@ CREATE SEQUENCE public.seq_codesystem_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_codesystem_pid OWNER TO admin;
+ALTER TABLE public.seq_codesystem_pid OWNER TO admin;
 
 --
 -- Name: seq_codesystemver_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -959,7 +959,7 @@ CREATE SEQUENCE public.seq_codesystemver_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_codesystemver_pid OWNER TO admin;
+ALTER TABLE public.seq_codesystemver_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_desig_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -973,7 +973,7 @@ CREATE SEQUENCE public.seq_concept_desig_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_desig_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_desig_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_map_group_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -987,7 +987,7 @@ CREATE SEQUENCE public.seq_concept_map_group_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_map_group_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_map_group_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_map_grp_elm_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1001,7 +1001,7 @@ CREATE SEQUENCE public.seq_concept_map_grp_elm_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_map_grp_elm_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_map_grp_elm_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_map_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1015,7 +1015,7 @@ CREATE SEQUENCE public.seq_concept_map_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_map_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_map_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_pc_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1029,7 +1029,7 @@ CREATE SEQUENCE public.seq_concept_pc_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_pc_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_pc_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1043,7 +1043,7 @@ CREATE SEQUENCE public.seq_concept_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_pid OWNER TO admin;
 
 --
 -- Name: seq_concept_prop_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1057,7 +1057,7 @@ CREATE SEQUENCE public.seq_concept_prop_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_concept_prop_pid OWNER TO admin;
+ALTER TABLE public.seq_concept_prop_pid OWNER TO admin;
 
 --
 -- Name: seq_empi_link_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1071,7 +1071,7 @@ CREATE SEQUENCE public.seq_empi_link_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_empi_link_id OWNER TO admin;
+ALTER TABLE public.seq_empi_link_id OWNER TO admin;
 
 --
 -- Name: seq_forcedid_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1085,7 +1085,7 @@ CREATE SEQUENCE public.seq_forcedid_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_forcedid_id OWNER TO admin;
+ALTER TABLE public.seq_forcedid_id OWNER TO admin;
 
 --
 -- Name: seq_hfj_revinfo; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1099,7 +1099,7 @@ CREATE SEQUENCE public.seq_hfj_revinfo
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_hfj_revinfo OWNER TO admin;
+ALTER TABLE public.seq_hfj_revinfo OWNER TO admin;
 
 --
 -- Name: seq_historytag_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1113,7 +1113,7 @@ CREATE SEQUENCE public.seq_historytag_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_historytag_id OWNER TO admin;
+ALTER TABLE public.seq_historytag_id OWNER TO admin;
 
 --
 -- Name: seq_idxcmbtoknu_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1127,7 +1127,7 @@ CREATE SEQUENCE public.seq_idxcmbtoknu_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_idxcmbtoknu_id OWNER TO admin;
+ALTER TABLE public.seq_idxcmbtoknu_id OWNER TO admin;
 
 --
 -- Name: seq_idxcmpstruniq_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1141,7 +1141,7 @@ CREATE SEQUENCE public.seq_idxcmpstruniq_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_idxcmpstruniq_id OWNER TO admin;
+ALTER TABLE public.seq_idxcmpstruniq_id OWNER TO admin;
 
 --
 -- Name: seq_npm_pack; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1155,7 +1155,7 @@ CREATE SEQUENCE public.seq_npm_pack
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_npm_pack OWNER TO admin;
+ALTER TABLE public.seq_npm_pack OWNER TO admin;
 
 --
 -- Name: seq_npm_packver; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1169,7 +1169,7 @@ CREATE SEQUENCE public.seq_npm_packver
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_npm_packver OWNER TO admin;
+ALTER TABLE public.seq_npm_packver OWNER TO admin;
 
 --
 -- Name: seq_npm_packverres; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1183,7 +1183,7 @@ CREATE SEQUENCE public.seq_npm_packverres
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_npm_packverres OWNER TO admin;
+ALTER TABLE public.seq_npm_packverres OWNER TO admin;
 
 --
 -- Name: seq_res_reindex_job; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1197,7 +1197,7 @@ CREATE SEQUENCE public.seq_res_reindex_job
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_res_reindex_job OWNER TO admin;
+ALTER TABLE public.seq_res_reindex_job OWNER TO admin;
 
 --
 -- Name: seq_reslink_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1211,7 +1211,7 @@ CREATE SEQUENCE public.seq_reslink_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_reslink_id OWNER TO admin;
+ALTER TABLE public.seq_reslink_id OWNER TO admin;
 
 --
 -- Name: seq_resource_history_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1225,7 +1225,7 @@ CREATE SEQUENCE public.seq_resource_history_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_resource_history_id OWNER TO admin;
+ALTER TABLE public.seq_resource_history_id OWNER TO admin;
 
 --
 -- Name: seq_resource_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1239,7 +1239,7 @@ CREATE SEQUENCE public.seq_resource_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_resource_id OWNER TO admin;
+ALTER TABLE public.seq_resource_id OWNER TO admin;
 
 --
 -- Name: seq_resparmpresent_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1253,7 +1253,7 @@ CREATE SEQUENCE public.seq_resparmpresent_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_resparmpresent_id OWNER TO admin;
+ALTER TABLE public.seq_resparmpresent_id OWNER TO admin;
 
 --
 -- Name: seq_restag_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1267,7 +1267,7 @@ CREATE SEQUENCE public.seq_restag_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_restag_id OWNER TO admin;
+ALTER TABLE public.seq_restag_id OWNER TO admin;
 
 --
 -- Name: seq_search; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1281,7 +1281,7 @@ CREATE SEQUENCE public.seq_search
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_search OWNER TO admin;
+ALTER TABLE public.seq_search OWNER TO admin;
 
 --
 -- Name: seq_search_inc; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1295,7 +1295,7 @@ CREATE SEQUENCE public.seq_search_inc
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_search_inc OWNER TO admin;
+ALTER TABLE public.seq_search_inc OWNER TO admin;
 
 --
 -- Name: seq_search_res; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1309,7 +1309,7 @@ CREATE SEQUENCE public.seq_search_res
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_search_res OWNER TO admin;
+ALTER TABLE public.seq_search_res OWNER TO admin;
 
 --
 -- Name: seq_spidx_coords; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1323,7 +1323,7 @@ CREATE SEQUENCE public.seq_spidx_coords
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_coords OWNER TO admin;
+ALTER TABLE public.seq_spidx_coords OWNER TO admin;
 
 --
 -- Name: seq_spidx_date; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1337,7 +1337,7 @@ CREATE SEQUENCE public.seq_spidx_date
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_date OWNER TO admin;
+ALTER TABLE public.seq_spidx_date OWNER TO admin;
 
 --
 -- Name: seq_spidx_number; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1351,7 +1351,7 @@ CREATE SEQUENCE public.seq_spidx_number
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_number OWNER TO admin;
+ALTER TABLE public.seq_spidx_number OWNER TO admin;
 
 --
 -- Name: seq_spidx_quantity; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1365,7 +1365,7 @@ CREATE SEQUENCE public.seq_spidx_quantity
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_quantity OWNER TO admin;
+ALTER TABLE public.seq_spidx_quantity OWNER TO admin;
 
 --
 -- Name: seq_spidx_quantity_nrml; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1379,7 +1379,7 @@ CREATE SEQUENCE public.seq_spidx_quantity_nrml
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_quantity_nrml OWNER TO admin;
+ALTER TABLE public.seq_spidx_quantity_nrml OWNER TO admin;
 
 --
 -- Name: seq_spidx_string; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1393,7 +1393,7 @@ CREATE SEQUENCE public.seq_spidx_string
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_string OWNER TO admin;
+ALTER TABLE public.seq_spidx_string OWNER TO admin;
 
 --
 -- Name: seq_spidx_token; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1407,7 +1407,7 @@ CREATE SEQUENCE public.seq_spidx_token
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_token OWNER TO admin;
+ALTER TABLE public.seq_spidx_token OWNER TO admin;
 
 --
 -- Name: seq_spidx_uri; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1421,7 +1421,7 @@ CREATE SEQUENCE public.seq_spidx_uri
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_spidx_uri OWNER TO admin;
+ALTER TABLE public.seq_spidx_uri OWNER TO admin;
 
 --
 -- Name: seq_subscription_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1435,7 +1435,7 @@ CREATE SEQUENCE public.seq_subscription_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_subscription_id OWNER TO admin;
+ALTER TABLE public.seq_subscription_id OWNER TO admin;
 
 --
 -- Name: seq_tagdef_id; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1449,7 +1449,7 @@ CREATE SEQUENCE public.seq_tagdef_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_tagdef_id OWNER TO admin;
+ALTER TABLE public.seq_tagdef_id OWNER TO admin;
 
 --
 -- Name: seq_valueset_c_dsgntn_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1463,7 +1463,7 @@ CREATE SEQUENCE public.seq_valueset_c_dsgntn_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_valueset_c_dsgntn_pid OWNER TO admin;
+ALTER TABLE public.seq_valueset_c_dsgntn_pid OWNER TO admin;
 
 --
 -- Name: seq_valueset_concept_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1477,7 +1477,7 @@ CREATE SEQUENCE public.seq_valueset_concept_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_valueset_concept_pid OWNER TO admin;
+ALTER TABLE public.seq_valueset_concept_pid OWNER TO admin;
 
 --
 -- Name: seq_valueset_pid; Type: SEQUENCE; Schema: public; Owner: admin
@@ -1491,7 +1491,7 @@ CREATE SEQUENCE public.seq_valueset_pid
     CACHE 1;
 
 
-ALTER SEQUENCE public.seq_valueset_pid OWNER TO admin;
+ALTER TABLE public.seq_valueset_pid OWNER TO admin;
 
 --
 -- Name: trm_codesystem; Type: TABLE; Schema: public; Owner: admin
@@ -1626,7 +1626,7 @@ CREATE TABLE public.trm_concept_map_grp_elm_tgt (
     system_version character varying(200),
     valueset_url character varying(200),
     concept_map_grp_elm_pid bigint NOT NULL,
-    CONSTRAINT trm_concept_map_grp_elm_tgt_target_equivalence_check CHECK (((target_equivalence)::text = ANY ((ARRAY['RELATEDTO'::character varying, 'EQUIVALENT'::character varying, 'EQUAL'::character varying, 'WIDER'::character varying, 'SUBSUMES'::character varying, 'NARROWER'::character varying, 'SPECIALIZES'::character varying, 'INEXACT'::character varying, 'UNMATCHED'::character varying, 'DISJOINT'::character varying, 'NULL'::character varying])::text[])))
+    CONSTRAINT trm_concept_map_grp_elm_tgt_target_equivalence_check CHECK (((target_equivalence)::text = ANY (ARRAY[('RELATEDTO'::character varying)::text, ('EQUIVALENT'::character varying)::text, ('EQUAL'::character varying)::text, ('WIDER'::character varying)::text, ('SUBSUMES'::character varying)::text, ('NARROWER'::character varying)::text, ('SPECIALIZES'::character varying)::text, ('INEXACT'::character varying)::text, ('UNMATCHED'::character varying)::text, ('DISJOINT'::character varying)::text, ('NULL'::character varying)::text])))
 );
 
 
@@ -1682,7 +1682,7 @@ CREATE TABLE public.trm_valueset (
     total_concepts bigint DEFAULT 0 NOT NULL,
     url character varying(200) NOT NULL,
     ver character varying(200),
-    CONSTRAINT trm_valueset_expansion_status_check CHECK (((expansion_status)::text = ANY ((ARRAY['NOT_EXPANDED'::character varying, 'EXPANSION_IN_PROGRESS'::character varying, 'EXPANDED'::character varying, 'FAILED_TO_EXPAND'::character varying])::text[])))
+    CONSTRAINT trm_valueset_expansion_status_check CHECK (((expansion_status)::text = ANY (ARRAY[('NOT_EXPANDED'::character varying)::text, ('EXPANSION_IN_PROGRESS'::character varying)::text, ('EXPANDED'::character varying)::text, ('FAILED_TO_EXPAND'::character varying)::text])))
 );
 
 
@@ -1790,6 +1790,60 @@ SELECT pg_catalog.lo_create('17218');
 ALTER LARGE OBJECT 17218 OWNER TO admin;
 
 --
+-- Name: 25398; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('25398');
+
+
+ALTER LARGE OBJECT 25398 OWNER TO admin;
+
+--
+-- Name: 33590; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('33590');
+
+
+ALTER LARGE OBJECT 33590 OWNER TO admin;
+
+--
+-- Name: 33591; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('33591');
+
+
+ALTER LARGE OBJECT 33591 OWNER TO admin;
+
+--
+-- Name: 33592; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('33592');
+
+
+ALTER LARGE OBJECT 33592 OWNER TO admin;
+
+--
+-- Name: 33593; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('33593');
+
+
+ALTER LARGE OBJECT 33593 OWNER TO admin;
+
+--
+-- Name: 33594; Type: BLOB; Schema: -; Owner: admin
+--
+
+SELECT pg_catalog.lo_create('33594');
+
+
+ALTER LARGE OBJECT 33594 OWNER TO admin;
+
+--
 -- Data for Name: bt2_job_instance; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
@@ -1874,6 +1928,10 @@ COPY public.hfj_history_tag (pid, partition_date, partition_id, tag_id, res_ver_
 53	\N	\N	3	53	53	Encounter
 54	\N	\N	3	54	54	Encounter
 55	\N	\N	3	55	55	Encounter
+102	\N	\N	1	102	102	Patient
+103	\N	\N	2	102	102	Patient
+104	\N	\N	2	103	102	Patient
+105	\N	\N	1	103	102	Patient
 \.
 
 
@@ -2108,6 +2166,8 @@ COPY public.hfj_res_tag (pid, partition_date, partition_id, tag_id, res_id, res_
 53	\N	\N	3	53	Encounter
 54	\N	\N	3	54	Encounter
 55	\N	\N	3	55	Encounter
+102	\N	\N	1	102	Patient
+103	\N	\N	2	102	Patient
 \.
 
 
@@ -2172,6 +2232,21 @@ COPY public.hfj_res_ver (pid, partition_date, partition_id, res_deleted_at, res_
 85	\N	\N	\N	R4	f	2024-03-30 04:58:13.109	2024-03-30 04:58:13.109	JSON	7u2UnecSfNpv53rO	\N	85	{"resourceType":"Observation","status":"final","code":{"coding":[{"system":"http://loinc.org","code":"49765-1","display":"Calcium [Mass/volume] in Blood"}],"text":"Calcium"},"subject":{"reference":"Patient/1"},"effectiveDateTime":"2023-01-17","issued":"2023-01-17T10:30:00Z","valueQuantity":{"value":9.0,"unit":"mg/dL","system":"http://unitsofmeasure.org","code":"mg/dL"},"interpretation":[{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation","code":"N","display":"Normal"}]}],"referenceRange":[{"low":{"value":8.6,"unit":"mg/dL","system":"http://unitsofmeasure.org","code":"mg/dL"},"high":{"value":10.2,"unit":"mg/dL","system":"http://unitsofmeasure.org","code":"mg/dL"}}]}	Observation	1	\N
 86	\N	\N	\N	R4	f	2024-03-30 04:58:53.964	2024-03-30 04:58:53.964	JSON	09pd5UaP1ey1E5UE	\N	86	{"resourceType":"Observation","status":"final","code":{"coding":[{"system":"http://loinc.org","code":"2339-0","display":"Glucose [Mass/volume] in Blood"}],"text":"Blood Glucose"},"subject":{"reference":"Patient/1"},"effectiveDateTime":"2023-01-17","issued":"2023-01-17T10:30:00Z","valueQuantity":{"value":6.1,"unit":"mmol/L","system":"http://unitsofmeasure.org","code":"mmol/L"},"interpretation":[{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation","code":"N","display":"Normal"}]}],"referenceRange":[{"low":{"value":3.9,"unit":"mmol/L","system":"http://unitsofmeasure.org","code":"mmol/L"},"high":{"value":7.8,"unit":"mmol/L","system":"http://unitsofmeasure.org","code":"mmol/L"},"type":{"text":"Nonfasting Blood Glucose Reference Range"}}]}	Observation	1	\N
 87	\N	\N	\N	R4	f	2024-03-30 05:00:46.183	2024-03-30 05:00:46.183	JSON	aT6aYjxEQ6xH7owa	\N	87	{"resourceType":"DiagnosticReport","basedOn":[{"reference":"ServiceRequest/59"}],"status":"final","code":{"coding":[{"system":"http://loinc.org","code":"51990-0","display":"Basic metabolic panel - Blood"}],"text":"Basic metabolic panel"},"subject":{"reference":"Patient/1"},"effectiveDateTime":"2023-01-17T08:30:00+11:00","issued":"2023-01-17T12:30:00Z","performer":[{"display":"DEF Laboratory"}],"result":[{"reference":"Observation/79","display":"Sodium [Moles/volume] in Blood"},{"reference":"Observation/80","display":"Potassium [Moles/volume] in Blood"},{"reference":"Observation/81","display":"Chloride [Moles/volume] in Blood"},{"reference":"Observation/82","display":"Carbon dioxide, total [Moles/volume] in Blood"},{"reference":"Observation/83","display":"Urea nitrogen [Mass/volume] in Blood"},{"reference":"Observation/84","display":"Creatinine [Mass/volume] in Blood"},{"reference":"Observation/85","display":"Calcium [Mass/volume] in Blood"},{"reference":"Observation/86","display":"Glucose [Mass/volume] in Blood"}],"conclusion":"The Basic Metabolic Panel results are within normal ranges."}	DiagnosticReport	1	\N
+161	\N	\N	\N	R4	f	2024-03-30 04:27:28.171	2024-03-30 18:09:06.624	JSON	eTU0B23vh8uiF3sr	\N	57	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"100898-6"}],"text":"Lipid panel - Serum or Plasma"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/53"},"occurrenceDateTime":"2022-11-21","authoredOn":"2022-11-21T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	2	\N
+102	\N	\N	\N	R4	t	2024-03-30 05:34:48.236	2024-03-30 05:34:48.236	JSON	tsrdovjPtw3HCanc	\N	102	{"resourceType":"Patient","identifier":[{"type":{"coding":[{"system":"http://hl7.org/fhir/v2/0203","code":"RRI"}],"text":"eHealth Ontario Enterprise Identifier"},"system":"http://ehealthontario.ca/fhir/NamingSystem/id-pcr-eid","value":"2923"},{"type":{"coding":[{"system":"http://hl7.org/fhir/v2/0203","code":"MR"}],"text":"Wait Time Information System"},"system":"http://ehealthontario.ca/fhir/NamingSystem/id-example-uri","value":"FULL_PROFILE_LEN3"},{"type":{"coding":[{"system":"http://hl7.org/fhir/v2/0203","code":"JHN"}],"text":"Ontario, Canada Personal Health Number"},"system":"https://fhir.infoway-inforoute.ca/NamingSystem/ca-on-patient-hcn","value":"6132001124"},{"type":{"coding":[{"system":"http://hl7.org/fhir/v2/0203","code":"MR"}],"text":"Brantford General"},"system":"http://ehealthontario.ca/fhir/NamingSystem/id-example1-uri","value":"WSD00038992"},{"type":{"coding":[{"system":"http://hl7.org/fhir/v2/0203","code":"JHN"}],"text":"British Columbia, Personal Health Number"},"system":"https://fhir.infoway-inforoute.ca/NamingSystem/ca-bc-patient-healthcare-id","value":"1806194839"}],"name":[{"use":"official","family":"Ma","given":["Yun"]}],"telecom":[{"system":"phone","value":"+1-222-22-22","use":"home"},{"system":"email","value":"test2@uwaterloo.ca","use":"home"}],"gender":"male","birthDate":"1951-01-02","address":[{"use":"home","type":"physical","line":["HomeAd HomeAddress.stName 2"],"city":"Waterloo","state":"ON","postalCode":"K4A0K6","country":"CAN"}],"contact":[{"relationship":[{"coding":[{"system":"http://hl7.org/fhir/v2/0131","code":"C","display":"Emergency Contact"}]}],"telecom":[{"system":"phone","value":"+1-222-22-23"}]}],"communication":[{"language":{"coding":[{"system":"urn:ietf:bcp:47","code":"en","display":"English"}]},"preferred":true}]}	Patient	1	\N
+103	\N	\N	2024-03-30 05:35:30.333	R4	t	2024-03-30 05:34:48.236	2024-03-30 05:35:30.333	DEL	ufeaxMCmZQBY2z3b	\N	102	\N	Patient	2	\N
+152	\N	\N	\N	R4	f	2024-03-30 17:58:42.089	2024-03-30 17:58:42.089	JSON	e9BT3aJmrLBoNVKH	\N	152	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"51990-0"}],"text":"Basic metabolic panel - Blood"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/55"},"occurrenceDateTime":"2023-01-10","authoredOn":"2023-01-10T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	1	\N
+153	\N	\N	2024-03-30 17:59:30.221	R4	f	2024-03-30 17:58:42.089	2024-03-30 17:59:30.221	DEL	oo6Uqd1z1C1WZQpv	\N	152	\N	ServiceRequest	2	\N
+154	\N	\N	\N	R4	f	2024-03-30 18:01:06.793	2024-03-30 18:01:06.793	JSON	f2LjBr2nd5j2O4oK	\N	153	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"51990-0"}],"text":"Basic metabolic panel - Blood"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/55"},"occurrenceDateTime":"2023-01-10","authoredOn":"2023-01-10T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	1	\N
+155	\N	\N	2024-03-30 18:02:04.168	R4	f	2024-03-30 18:01:06.793	2024-03-30 18:02:04.168	DEL	FFteNK9Ri9ymt2qW	\N	153	\N	ServiceRequest	2	\N
+156	\N	\N	\N	R4	f	2024-03-30 18:03:47.217	2024-03-30 18:03:47.217	JSON	PKPch3w2NElQO5Mw	\N	154	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/55"},"occurrenceDateTime":"2023-01-10","authoredOn":"2023-01-10T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	1	\N
+157	\N	\N	\N	R4	f	2024-03-30 18:03:47.217	2024-03-30 18:05:45.75	JSON	b4kygEY2VKGqgGOm	\N	154	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"51990-0"}],"text":"Basic metabolic panel - Blood"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/55"},"occurrenceDateTime":"2023-01-10","authoredOn":"2023-01-10T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	2	\N
+158	\N	\N	\N	R4	f	2024-03-29 23:51:30.453	2024-03-30 18:06:44.473	JSON	sNSQ2LmLvoabd5Fn	\N	5	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"100898-6"}],"text":"Lipid panel - Serum or Plasma"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/3"},"occurrenceDateTime":"2023-11-30","authoredOn":"2023-11-24T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	2	\N
+159	\N	\N	\N	R4	f	2024-03-29 23:51:34.845	2024-03-30 18:07:36.645	JSON	krWUW7NIwu5VWo4d	\N	6	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"51990-0"}],"text":"Basic metabolic panel - Blood"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/4"},"occurrenceDateTime":"2024-01-09","authoredOn":"2024-01-02T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	2	\N
+160	\N	\N	\N	R4	f	2024-03-30 04:26:35.106	2024-03-30 18:08:24.163	JSON	7euTPhFD2JYvC1AO	\N	56	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"100898-6"}],"text":"Lipid panel - Serum or Plasma"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/52"},"occurrenceDateTime":"2023-05-20","authoredOn":"2023-05-20T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	2	\N
+162	\N	\N	\N	R4	f	2024-03-30 04:29:25.948	2024-03-30 18:09:53.003	JSON	7cq2e1ePCzCmx1QX	\N	58	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"51990-0"}],"text":"Basic metabolic panel - Blood"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/54"},"occurrenceDateTime":"2023-08-01","authoredOn":"2023-08-01T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	2	\N
+163	\N	\N	\N	R4	f	2024-03-30 04:29:42.34	2024-03-30 18:21:32.889	JSON	QAkM4V3c2DXxQiuW	\N	59	{"resourceType":"ServiceRequest","identifier":[{"type":{"coding":[{"system":"http://terminology.hl7.org/CodeSystem/v2-0203","code":"PLAC"}],"text":"Placer"},"system":"urn:oid:1.3.4.5.6.7","value":"2345234234234"}],"status":"completed","intent":"original-order","code":{"coding":[{"system":"http://loinc.org","code":"51990-0"}],"text":"Basic metabolic panel - Blood"},"subject":{"reference":"Patient/1"},"encounter":{"reference":"Encounter/55"},"occurrenceDateTime":"2023-01-10","authoredOn":"2023-01-10T10:30:00Z","requester":{"reference":"Practitioner/2"},"note":[{"text":"Patient is afraid of needles"}]}	ServiceRequest	2	\N
+164	\N	\N	2024-03-30 18:22:47.033	R4	f	2024-03-30 18:03:47.217	2024-03-30 18:22:47.033	DEL	0zP79TGPz1Afn4oe	\N	154	\N	ServiceRequest	3	\N
 \.
 
 
@@ -2236,6 +2311,21 @@ COPY public.hfj_res_ver_prov (res_ver_pid, partition_date, partition_id, request
 85	\N	\N	7u2UnecSfNpv53rO	\N	85
 86	\N	\N	09pd5UaP1ey1E5UE	\N	86
 87	\N	\N	aT6aYjxEQ6xH7owa	\N	87
+102	\N	\N	tsrdovjPtw3HCanc	\N	102
+103	\N	\N	ufeaxMCmZQBY2z3b	\N	102
+152	\N	\N	e9BT3aJmrLBoNVKH	\N	152
+153	\N	\N	oo6Uqd1z1C1WZQpv	\N	152
+154	\N	\N	f2LjBr2nd5j2O4oK	\N	153
+155	\N	\N	FFteNK9Ri9ymt2qW	\N	153
+156	\N	\N	PKPch3w2NElQO5Mw	\N	154
+157	\N	\N	b4kygEY2VKGqgGOm	\N	154
+158	\N	\N	sNSQ2LmLvoabd5Fn	\N	5
+159	\N	\N	krWUW7NIwu5VWo4d	\N	6
+160	\N	\N	7euTPhFD2JYvC1AO	\N	56
+161	\N	\N	eTU0B23vh8uiF3sr	\N	57
+162	\N	\N	7cq2e1ePCzCmx1QX	\N	58
+163	\N	\N	QAkM4V3c2DXxQiuW	\N	59
+164	\N	\N	0zP79TGPz1Afn4oe	\N	154
 \.
 
 
@@ -2248,8 +2338,6 @@ COPY public.hfj_resource (res_id, partition_date, partition_id, res_deleted_at, 
 2	\N	\N	\N	R4	f	2024-03-29 23:51:10.897	2024-03-29 23:51:10.897	2	f	a0f95c1d93f94cce9995a30dbfd931e29516b6e0c28de90f3d20ba66b7fefd49	1	\N	f	f	f	f	f	f	f	t	t	f	Practitioner	f	1
 3	\N	\N	\N	R4	t	2024-03-29 23:51:19.362	2024-03-29 23:51:19.362	3	t	567549cd29131c9fb94835806689051ee2f284efcd096ae7eb58e68648b5ed82	1	\N	f	f	f	f	f	f	f	t	t	f	Encounter	f	1
 4	\N	\N	\N	R4	t	2024-03-29 23:51:24.703	2024-03-29 23:51:24.703	4	t	567549cd29131c9fb94835806689051ee2f284efcd096ae7eb58e68648b5ed82	1	\N	f	f	f	f	f	f	f	t	t	f	Encounter	f	1
-5	\N	\N	\N	R4	f	2024-03-29 23:51:30.453	2024-03-29 23:51:30.453	5	t	c57c70112298087ee34e0428e49d59e66ae5887284e8609d72a7678b4f31a401	1	\N	f	f	f	t	f	f	f	f	t	f	ServiceRequest	f	1
-6	\N	\N	\N	R4	f	2024-03-29 23:51:34.845	2024-03-29 23:51:34.845	6	t	251283b2061b40fa766dc408da6999ea5f790e770a0ef9b33f5112c44bb76219	1	\N	f	f	f	t	f	f	f	f	t	f	ServiceRequest	f	1
 7	\N	\N	\N	R4	f	2024-03-29 23:51:41.609	2024-03-29 23:51:41.609	7	t	c96016606b1cc188ee3e32e470e0e6440e8b392bd2b5a63bc4d4386ee96cc99d	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 8	\N	\N	\N	R4	f	2024-03-29 23:51:44.748	2024-03-29 23:51:44.748	8	t	d3f695853d9f83f8e871433e41a449ad0767bed791048bec5e040367a55a3418	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 9	\N	\N	\N	R4	f	2024-03-29 23:51:47.861	2024-03-29 23:51:47.861	9	t	a8d448b200bda1195d44b08411a632181a9d8857659a5a82a766351110fbe1f0	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
@@ -2268,10 +2356,6 @@ COPY public.hfj_resource (res_id, partition_date, partition_id, res_deleted_at, 
 53	\N	\N	\N	R4	t	2024-03-30 04:26:09.137	2024-03-30 04:26:09.137	53	t	567549cd29131c9fb94835806689051ee2f284efcd096ae7eb58e68648b5ed82	1	\N	f	f	f	f	f	f	f	t	t	f	Encounter	f	1
 54	\N	\N	\N	R4	t	2024-03-30 04:26:12.997	2024-03-30 04:26:12.997	54	t	567549cd29131c9fb94835806689051ee2f284efcd096ae7eb58e68648b5ed82	1	\N	f	f	f	f	f	f	f	t	t	f	Encounter	f	1
 55	\N	\N	\N	R4	t	2024-03-30 04:26:15.97	2024-03-30 04:26:15.97	55	t	567549cd29131c9fb94835806689051ee2f284efcd096ae7eb58e68648b5ed82	1	\N	f	f	f	f	f	f	f	t	t	f	Encounter	f	1
-56	\N	\N	\N	R4	f	2024-03-30 04:26:35.106	2024-03-30 04:26:35.106	56	t	df47e8b3d7b8834c48bea5f3890d405f54d6700188425074ecf6e834591c2649	1	\N	f	f	f	t	f	f	f	f	t	f	ServiceRequest	f	1
-57	\N	\N	\N	R4	f	2024-03-30 04:27:28.171	2024-03-30 04:27:28.171	57	t	b97b18fc9d7b7fc551d7cded170092a7a4c8094dde4bbb7cb4623be10b63a916	1	\N	f	f	f	t	f	f	f	f	t	f	ServiceRequest	f	1
-58	\N	\N	\N	R4	f	2024-03-30 04:29:25.948	2024-03-30 04:29:25.948	58	t	888ab36e9e65ecfe61806633825fb3525ede7d886b2819553f7dd2e32b7a78e2	1	\N	f	f	f	t	f	f	f	f	t	f	ServiceRequest	f	1
-59	\N	\N	\N	R4	f	2024-03-30 04:29:42.34	2024-03-30 04:29:42.34	59	t	56e0c4bdf94f8a6facdbe67147f05bbb3467e3486cb15f6924a689e6afb713c9	1	\N	f	f	f	t	f	f	f	f	t	f	ServiceRequest	f	1
 60	\N	\N	\N	R4	f	2024-03-30 04:31:56.282	2024-03-30 04:31:56.282	60	t	17b31a70b9d424531bf56b710633b115abbba23fdaf00887c680ca87ce6b6d82	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 61	\N	\N	\N	R4	f	2024-03-30 04:33:07.05	2024-03-30 04:33:07.05	61	t	b07d31921317815019dd1b5f86f33fe50d7c45abe120850ce8af246f9880c587	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 62	\N	\N	\N	R4	f	2024-03-30 04:33:53.184	2024-03-30 04:33:53.184	62	t	4f04a4b5ed3412644f83cf8ece4e65650d34d982746ebb9f30244aadf8a01441	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
@@ -2288,6 +2372,11 @@ COPY public.hfj_resource (res_id, partition_date, partition_id, res_deleted_at, 
 73	\N	\N	\N	R4	f	2024-03-30 04:47:11.586	2024-03-30 04:47:11.586	73	t	07fb9a4323085887c59b29d704f08bcfa2226a77ef05dd476b7b9db70dd32667	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 74	\N	\N	\N	R4	f	2024-03-30 04:47:58.496	2024-03-30 04:47:58.496	74	t	7f328a5c2ee67c575d964b99e1e3569a71412b0753ac3ace7da2789a2ca22d0c	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 75	\N	\N	\N	R4	f	2024-03-30 04:48:37.308	2024-03-30 04:48:37.308	75	t	94c3bb445b8c8d92c1cc3d58d5241abd9baa565f0bd443a16735520f8dfa29bd	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
+6	\N	\N	\N	R4	f	2024-03-29 23:51:34.845	2024-03-30 18:07:36.645	6	t	06c3de5a56b3e5c078470af4502b9d322b6a07e43e33d672c63b4e49dd1db773	1	\N	f	f	f	t	f	f	f	t	t	f	ServiceRequest	f	2
+56	\N	\N	\N	R4	f	2024-03-30 04:26:35.106	2024-03-30 18:08:24.163	56	t	e7f7c14b0fee82023d652272b2e58b595c992dbef6705e65779abb8b16980b62	1	\N	f	f	f	t	f	f	f	t	t	f	ServiceRequest	f	2
+57	\N	\N	\N	R4	f	2024-03-30 04:27:28.171	2024-03-30 18:09:06.624	57	t	2294551db7b4161d46500657d30c1701f4be60c5026ace4efeb143acbb88b6f2	1	\N	f	f	f	t	f	f	f	t	t	f	ServiceRequest	f	2
+58	\N	\N	\N	R4	f	2024-03-30 04:29:25.948	2024-03-30 18:09:53.003	58	t	9a48bbe05de47facba7f93e878e8ccfd16ca24798acaece7d9e480764332f1b6	1	\N	f	f	f	t	f	f	f	t	t	f	ServiceRequest	f	2
+59	\N	\N	\N	R4	f	2024-03-30 04:29:42.34	2024-03-30 18:21:32.889	59	t	e864ae2c04df297573479d269d1e08816204fc6e9d9299dde160bbc7b490ed71	1	\N	f	f	f	t	f	f	f	t	t	f	ServiceRequest	f	2
 76	\N	\N	\N	R4	f	2024-03-30 04:49:29.535	2024-03-30 04:49:29.535	76	t	830a10f8cd11f4d0aaddf2251c27e90bb962ffb8406a31d41ee9beca8f4d6637	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 77	\N	\N	\N	R4	f	2024-03-30 04:50:10.779	2024-03-30 04:50:10.779	77	t	c6cfd8ffd4b626804d77a187cf21f55a969de693d605bc4ef82e148ae14711ba	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 78	\N	\N	\N	R4	f	2024-03-30 04:52:21.763	2024-03-30 04:52:21.763	78	t	ab6753278179b05126effb9cf068287c4a153c43faa6740734b5dff64605bf40	1	\N	f	f	f	t	f	f	f	t	t	f	DiagnosticReport	f	1
@@ -2300,6 +2389,11 @@ COPY public.hfj_resource (res_id, partition_date, partition_id, res_deleted_at, 
 85	\N	\N	\N	R4	f	2024-03-30 04:58:13.109	2024-03-30 04:58:13.109	85	t	f145ca1abb6e46e9d2cb311a735ae572e75e3505fe1f74cab79331ff81054d80	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 86	\N	\N	\N	R4	f	2024-03-30 04:58:53.964	2024-03-30 04:58:53.964	86	t	d69ae22f83eed0de77094c4459e87c20a0253d47bd579c7855bc8dce2e55a1b2	1	\N	f	f	f	t	f	f	t	t	t	f	Observation	f	1
 87	\N	\N	\N	R4	f	2024-03-30 05:00:46.183	2024-03-30 05:00:46.183	87	t	c536212b3c8ba8e49e79e6e1fa78f627759319eafaffde2a26b1043eb6bc980a	1	\N	f	f	f	t	f	f	f	t	t	f	DiagnosticReport	f	1
+102	\N	\N	2024-03-30 05:35:30.333	R4	t	2024-03-30 05:34:48.236	2024-03-30 05:35:30.333	102	f	\N	1	\N	f	f	f	f	f	f	f	f	f	f	Patient	f	2
+152	\N	\N	2024-03-30 17:59:30.221	R4	f	2024-03-30 17:58:42.089	2024-03-30 17:59:30.221	152	f	\N	1	\N	f	f	f	f	f	f	f	f	f	f	ServiceRequest	f	2
+153	\N	\N	2024-03-30 18:02:04.168	R4	f	2024-03-30 18:01:06.793	2024-03-30 18:02:04.168	153	f	\N	1	\N	f	f	f	f	f	f	f	f	f	f	ServiceRequest	f	2
+5	\N	\N	\N	R4	f	2024-03-29 23:51:30.453	2024-03-30 18:06:44.473	5	t	0482b12bc0351958c371d5214af5405ee98b687a7bff75012ef272f4ea2d2cbb	1	\N	f	f	f	t	f	f	f	t	t	f	ServiceRequest	f	2
+154	\N	\N	2024-03-30 18:22:47.033	R4	f	2024-03-30 18:03:47.217	2024-03-30 18:22:47.033	154	f	\N	1	\N	f	f	f	f	f	f	f	f	f	f	ServiceRequest	f	3
 \.
 
 
@@ -2324,11 +2418,9 @@ COPY public.hfj_revinfo (rev, revtstmp) FROM stdin;
 --
 
 COPY public.hfj_search (pid, created, search_deleted, expiry_or_null, failure_code, failure_message, last_updated_high, last_updated_low, num_blocked, num_found, preferred_page_size, resource_id, resource_type, search_param_map, search_query_string, search_query_string_hash, search_type, search_status, total_count, search_uuid, optlock_version) FROM stdin;
-52	2024-03-30 04:21:46.509	f	\N	\N	\N	\N	\N	0	2	20	\N	Encounter	\N	17211	223007692	1	FINISHED	2	ff467cc5-70d4-4e30-825f-0e103ccec1a1	1
-53	2024-03-30 04:28:04.768	f	\N	\N	\N	\N	\N	0	4	20	\N	ServiceRequest	\N	17213	223007692	1	FINISHED	4	6e7bdb07-94c5-4640-ace6-60d41a1eee85	1
-54	2024-03-30 05:01:33.554	f	\N	\N	\N	\N	\N	0	5	20	\N	DiagnosticReport	\N	17216	-993151808	1	FINISHED	5	3a75f306-7952-4432-91b5-2433ca3ade6f	1
-55	2024-03-30 05:02:26.272	f	\N	\N	\N	\N	\N	0	6	20	\N	DiagnosticReport	\N	17217	-2072693855	1	FINISHED	6	e58f7fc6-7e07-42e2-a684-d851812c2138	1
-56	2024-03-30 05:03:29.445	f	\N	\N	\N	\N	\N	0	4	20	\N	Observation	\N	17218	1387898122	1	FINISHED	4	14e236ef-4021-4b39-82ad-775f6e09d6d8	1
+154	2024-03-30 17:49:29.875	f	\N	\N	\N	\N	\N	0	6	20	\N	ServiceRequest	\N	33592	223007692	1	FINISHED	6	bf1c144d-b805-4eab-9aee-2254e1cbcb89	1
+155	2024-03-30 18:11:31.965	f	\N	\N	\N	\N	\N	0	7	20	\N	ServiceRequest	\N	33593	223007692	1	FINISHED	7	6c0c4cde-5177-4931-9c71-57922098b3d3	1
+156	2024-03-30 18:23:05.315	f	\N	\N	\N	\N	\N	0	6	20	\N	ServiceRequest	\N	33594	223007692	1	FINISHED	6	dfded6af-8c8a-40b3-a5d3-f7496bcdc587	1
 \.
 
 
@@ -2345,27 +2437,25 @@ COPY public.hfj_search_include (pid, search_include, inc_recurse, revinclude, se
 --
 
 COPY public.hfj_search_result (pid, search_order, resource_pid, search_pid) FROM stdin;
-52	0	3	52
-53	1	4	52
-54	0	5	53
-55	1	56	53
-56	2	57	53
-57	3	6	53
-58	0	19	54
-59	1	20	54
-60	2	64	54
-61	3	78	54
-62	4	87	54
-63	0	19	55
-64	1	20	55
-65	2	64	55
-66	3	69	55
-67	4	78	55
-68	5	87	55
-69	0	7	56
-70	1	8	56
-71	2	9	56
-72	3	10	56
+164	0	5	154
+165	1	6	154
+166	2	56	154
+167	3	57	154
+168	4	58	154
+169	5	59	154
+170	0	59	155
+171	1	6	155
+172	2	56	155
+173	3	57	155
+174	4	58	155
+175	5	154	155
+176	6	5	155
+177	0	6	156
+178	1	56	156
+179	2	57	156
+180	3	58	156
+181	4	59	156
+182	5	5	156
 \.
 
 
@@ -2742,6 +2832,12 @@ COPY public.hfj_spidx_string (sp_id, partition_date, partition_id, sp_missing, s
 207	\N	\N	f	code	86	Observation	2024-03-30 04:58:53.964	2874010700076545834	2255293283549704696	7952934451955757422	Glucose [Mass/volume] in Blood	GLUCOSE [MASS/VOLUME] IN BLOOD
 208	\N	\N	f	code	87	DiagnosticReport	2024-03-30 05:00:46.183	-6550107811515209367	-3916981602437818560	3626723361271617949	Basic metabolic panel	BASIC METABOLIC PANEL
 209	\N	\N	f	code	87	DiagnosticReport	2024-03-30 05:00:46.183	-178878069667911357	-3916981602437818560	3626723361271617949	Basic metabolic panel - Blood	BASIC METABOLIC PANEL - BLOOD
+305	\N	\N	f	code	5	ServiceRequest	2024-03-30 18:06:44.473	-8996361140464897136	2834087348067369440	4178290700673806038	Lipid panel - Serum or Plasma	LIPID PANEL - SERUM OR PLASMA
+306	\N	\N	f	code	6	ServiceRequest	2024-03-30 18:07:36.645	7658643001008282855	2834087348067369440	4178290700673806038	Basic metabolic panel - Blood	BASIC METABOLIC PANEL - BLOOD
+307	\N	\N	f	code	56	ServiceRequest	2024-03-30 18:08:24.163	-8996361140464897136	2834087348067369440	4178290700673806038	Lipid panel - Serum or Plasma	LIPID PANEL - SERUM OR PLASMA
+308	\N	\N	f	code	57	ServiceRequest	2024-03-30 18:09:06.624	-8996361140464897136	2834087348067369440	4178290700673806038	Lipid panel - Serum or Plasma	LIPID PANEL - SERUM OR PLASMA
+309	\N	\N	f	code	58	ServiceRequest	2024-03-30 18:09:53.003	7658643001008282855	2834087348067369440	4178290700673806038	Basic metabolic panel - Blood	BASIC METABOLIC PANEL - BLOOD
+310	\N	\N	f	code	59	ServiceRequest	2024-03-30 18:21:32.889	7658643001008282855	2834087348067369440	4178290700673806038	Basic metabolic panel - Blood	BASIC METABOLIC PANEL - BLOOD
 \.
 
 
@@ -2917,6 +3013,12 @@ COPY public.hfj_spidx_token (sp_id, partition_date, partition_id, sp_missing, sp
 199	\N	\N	f	combo-code	86	Observation	2024-03-30 04:58:53.964	-1575406001252496924	-7445927209719109166	3790279195787844590	4401825082380038523	http://loinc.org	2339-0
 200	\N	\N	f	code	87	DiagnosticReport	2024-03-30 05:00:46.183	-3916981602437818560	2594497875333274272	3319050714030799406	6768056423286483180	http://loinc.org	51990-0
 201	\N	\N	f	status	87	DiagnosticReport	2024-03-30 05:00:46.183	5099951916665761693	7851490687183160034	-9206743552120168165	1897687856213184221	http://hl7.org/fhir/diagnostic-report-status	final
+264	\N	\N	f	code	5	ServiceRequest	2024-03-30 18:06:44.473	2834087348067369440	395797913585979755	-1877627185004940373	1355901946891737699	http://loinc.org	100898-6
+265	\N	\N	f	code	6	ServiceRequest	2024-03-30 18:07:36.645	2834087348067369440	395797913585979755	6484869485695654743	8659420766132094040	http://loinc.org	51990-0
+266	\N	\N	f	code	56	ServiceRequest	2024-03-30 18:08:24.163	2834087348067369440	395797913585979755	-1877627185004940373	1355901946891737699	http://loinc.org	100898-6
+267	\N	\N	f	code	57	ServiceRequest	2024-03-30 18:09:06.624	2834087348067369440	395797913585979755	-1877627185004940373	1355901946891737699	http://loinc.org	100898-6
+268	\N	\N	f	code	58	ServiceRequest	2024-03-30 18:09:53.003	2834087348067369440	395797913585979755	6484869485695654743	8659420766132094040	http://loinc.org	51990-0
+269	\N	\N	f	code	59	ServiceRequest	2024-03-30 18:21:32.889	2834087348067369440	395797913585979755	6484869485695654743	8659420766132094040	http://loinc.org	51990-0
 \.
 
 
@@ -3221,7 +3323,7 @@ SELECT pg_catalog.setval('public.seq_hfj_revinfo', 1, false);
 -- Name: seq_historytag_id; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_historytag_id', 101, true);
+SELECT pg_catalog.setval('public.seq_historytag_id', 151, true);
 
 
 --
@@ -3270,21 +3372,21 @@ SELECT pg_catalog.setval('public.seq_res_reindex_job', 1, false);
 -- Name: seq_reslink_id; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_reslink_id', 251, true);
+SELECT pg_catalog.setval('public.seq_reslink_id', 301, true);
 
 
 --
 -- Name: seq_resource_history_id; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_resource_history_id', 101, true);
+SELECT pg_catalog.setval('public.seq_resource_history_id', 201, true);
 
 
 --
 -- Name: seq_resource_id; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_resource_id', 101, true);
+SELECT pg_catalog.setval('public.seq_resource_id', 201, true);
 
 
 --
@@ -3298,14 +3400,14 @@ SELECT pg_catalog.setval('public.seq_resparmpresent_id', 1, false);
 -- Name: seq_restag_id; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_restag_id', 101, true);
+SELECT pg_catalog.setval('public.seq_restag_id', 151, true);
 
 
 --
 -- Name: seq_search; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_search', 101, true);
+SELECT pg_catalog.setval('public.seq_search', 201, true);
 
 
 --
@@ -3319,7 +3421,7 @@ SELECT pg_catalog.setval('public.seq_search_inc', 1, false);
 -- Name: seq_search_res; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_search_res', 101, true);
+SELECT pg_catalog.setval('public.seq_search_res', 201, true);
 
 
 --
@@ -3333,7 +3435,7 @@ SELECT pg_catalog.setval('public.seq_spidx_coords', 1, false);
 -- Name: seq_spidx_date; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_spidx_date', 101, true);
+SELECT pg_catalog.setval('public.seq_spidx_date', 201, true);
 
 
 --
@@ -3361,14 +3463,14 @@ SELECT pg_catalog.setval('public.seq_spidx_quantity_nrml', 1, false);
 -- Name: seq_spidx_string; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_spidx_string', 251, true);
+SELECT pg_catalog.setval('public.seq_spidx_string', 351, true);
 
 
 --
 -- Name: seq_spidx_token; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.seq_spidx_token', 201, true);
+SELECT pg_catalog.setval('public.seq_spidx_token', 301, true);
 
 
 --
@@ -3445,6 +3547,30 @@ SELECT pg_catalog.lo_close(0);
 
 SELECT pg_catalog.lo_open('17218', 131072);
 SELECT pg_catalog.lowrite(0, '\x3f5f69643d31302c372c382c39265f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
+SELECT pg_catalog.lo_open('25398', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
+SELECT pg_catalog.lo_open('33590', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f6973737565643d6765323032322d30312d30312670617469656e742e6269727468646174653d313935312d30312d30322670617469656e742e6964656e7469666965723d68747470253341253246253246656865616c74686f6e746172696f2e6361253246666869722532464e616d696e6753797374656d25324669642d7063722d65696425374332393233265f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
+SELECT pg_catalog.lo_open('33591', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f6973737565643d6765323032322d30312d30312670617469656e742e6269727468646174653d313935312d30312d30322670617469656e742e6964656e7469666965723d68747470253341253246253246656865616c74686f6e746172696f2e6361253246666869722532464e616d696e6753797374656d25324669642d7063722d65696425374332393233265f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
+SELECT pg_catalog.lo_open('33592', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
+SELECT pg_catalog.lo_open('33593', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
+SELECT pg_catalog.lo_close(0);
+
+SELECT pg_catalog.lo_open('33594', 131072);
+SELECT pg_catalog.lowrite(0, '\x3f5f636f756e743d3230');
 SELECT pg_catalog.lo_close(0);
 
 COMMIT;
